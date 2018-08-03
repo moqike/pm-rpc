@@ -2,11 +2,26 @@
   <body>
     Child Page
     <div>
-    <button id="test1">call print('test text')</button>
-    <br/>
-    <button id="test2">call delayCallback(2000, function(){alert('delay callback invoked')})</button>
-    <br/>
-    <button id="test3">call openDialog({onClosed: function(){alert('onClosed invoked')}})</button>
+      <div>
+        <button id="test1">Test</button> call RPC sync method
+        <i>print('test text')</i>
+      </div>
+      <div>
+        <button id="test2">Test</button> call RPC sync method with callback param
+        <i>delayCallback(2000, function(){alert('delay callback invoked')})</i>
+      </div>
+      <div>
+        <button id="test3">Test</button> call RPC sync method with nested param
+        <i>openDialog({onClosed: function(){alert('onClosed invoked')}})</i>
+      </div>
+      <div>
+        <button id="test4">Test</button> call RPC async method which returns promise resolved with string
+        <i>promiseString(2000)</i>
+      </div>
+      <div>
+        <button id="test5">Test</button> call RPC async method which returns promise rejected with error
+        <i>promiseRejected(2000)</i>
+      </div>
     </div>
   </body>
 </html>

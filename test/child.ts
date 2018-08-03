@@ -46,3 +46,27 @@ button3 && button3.addEventListener('click', function(){
     alert(returnedText);
   });
 }, false);
+
+/**
+ * Test 4
+ */
+const button4 = document.getElementById('test4');
+// tslint:disable-next-line:no-unused-expression
+button4 && button4.addEventListener('click', function(){
+  const result = client.invoke('ServiceProvider', 'promiseString', [2000]);
+  result.then((returnedText) => {
+    alert(returnedText);
+  });
+}, false);
+
+/**
+ * Test 5
+ */
+const button5 = document.getElementById('test5');
+// tslint:disable-next-line:no-unused-expression
+button5 && button5.addEventListener('click', function(){
+  const result = client.invoke('ServiceProvider', 'promiseRejected', [2000]);
+  result.catch((err) => {
+    alert(err);
+  });
+}, false);

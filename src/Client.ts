@@ -8,6 +8,7 @@ import {
   P2CRpcData,
   C2PRpcData,
   RpcArgument,
+  RpcResponse,
   SerializedRpcArgument,
   SerializedRpcArgumentElem,
   RPC_ARG_TYPE_KEY
@@ -146,7 +147,7 @@ export class Client {
           this._handleCallbackMessage(rpcData.uuid, rpcData.callbackArguments);
           break;
         case P2C_MESSAGE_TYPE.RPC_RESPONSE:
-          this._handleResponseMessage(rpcData.uuid, rpcData.result);
+          this._handleResponseMessage(rpcData.uuid, rpcData);
           break;
         default:
           break;
@@ -161,11 +162,15 @@ export class Client {
     }
   }
 
-  private _handleResponseMessage(uuid, result) {
+  private _handleResponseMessage(uuid, rpcData: RpcResponse) {
     this._cleanupTimeoutHandler(uuid);
     if (this._resultHandlers.hasOwnProperty(uuid)) {
       const resultHandler = this._resultHandlers[uuid];
-      resultHandler.resolve(result);
+      if (rpcData.success) {
+        resultHandler.resolve(rpcData.result);
+      } else {
+        resultHandler.reject(new Error(rpcData.result as string));
+      }
     }
   }
 

@@ -4,7 +4,6 @@ import {
   C2P_MESSAGE_TYPE,
   P2C_MESSAGE_TYPE,
   RpcCallback,
-  RpcArgument,
   RpcResponse,
   RpcResult,
   C2PRpcData,
@@ -59,7 +58,16 @@ export class Provider {
       });
       const deserializedArguments = this._deserializeArgument(rpcData.arguments);
       const result = this._invokeService(context, method, deserializedArguments);
-      this._sendResult(rpcData.uuid, result);
+      // Handle promise result
+      if (typeof result === 'object' && result.then && result.catch) {
+        result.then((asyncResult) => {
+          this._sendResult(rpcData.uuid, asyncResult);
+        }).catch((asyncError) => {
+          this._sendResult(rpcData.uuid, asyncError, false);
+        });
+      } else {
+        this._sendResult(rpcData.uuid, result);
+      }
     }
   }
 
@@ -114,12 +122,17 @@ export class Provider {
     this._targetWindow.postMessage(postData, '*');
   }
 
-  private _sendResult (uuid: string, result: RpcResult) {
+  private _sendResult (uuid: string, result: RpcResult, success: boolean = true) {
     const postData: RpcResponse = {
+      success,
       type: P2C_MESSAGE_TYPE.RPC_RESPONSE,
       result,
       uuid
     };
+    // Serialize error info
+    if (!success && postData.result) {
+      postData.result = (postData.result as Error).message || postData.result.toString();
+    }
     this._targetWindow.postMessage(postData, '*');
   }
 }

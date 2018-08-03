@@ -17,6 +17,22 @@ const ServiceProvider = {
       options.onClosed();
     }, 1000);
     return 'trigger option.onClosed after 1000ms';
+  },
+
+  promiseString: function(delay: number) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('String returned in promise');
+      }, delay);
+    });
+  },
+
+  promiseRejected: function(delay: number) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error('Custom Error'));
+      }, delay);
+    });
   }
 };
 const childiframe = document.getElementById('childframe');

@@ -69,6 +69,7 @@ export interface RpcCallback {
 }
 
 export interface RpcResponse {
+  success: boolean;
   type: P2C_MESSAGE_TYPE.RPC_RESPONSE;
   uuid: string;
   result: RpcResult;
