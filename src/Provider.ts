@@ -73,31 +73,6 @@ export class Provider {
     return result;
   }
 
-  // private _deserializeArguments (args: RpcArgument[]) {
-  //   const result = args.map((argument) => {
-  //     let mappedArgument = argument;
-  //     if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
-  //       switch (argument[RPC_ARG_TYPE_KEY]) {
-  //         case RPC_ARGUMENT_TYPE.CALLBACK:
-  //           const self = this;
-  //           mappedArgument = function(){
-  //             // Trigger client callback
-  //             self._invokeCallback((argument as CallbackFunction).uuid, [...arguments]);
-  //           };
-  //           break;
-  //         case RPC_ARGUMENT_TYPE.RUNTIME:
-  //           // TODO: new function
-  //           // result = new Function()
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     }
-  //     return mappedArgument;
-  //   });
-  //   return result;
-  // }
-
   private _deserializeArgument = (argument: SerializedRpcArgument) => {
     const self = this;
     let result = argument;
