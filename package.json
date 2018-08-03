@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server",
     "clean": "rimraf lib/*",
-    "build": "npm run clean & tsc -p ./build.tsconfig.json",
+    "build": "npm run clean && tsc -p ./build.tsconfig.json",
     "prepublish": "npm run build"
   },
   "repository": {
