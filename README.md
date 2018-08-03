@@ -3,7 +3,7 @@
 npm i --save mqk-pm-rpc
 ```
 ## Usage
-#### Init process provider
+#### Init RPC provider
 ```ts
 import { Provider } from 'mqk-pm-rpc';
 const provider = new Provider({
@@ -19,7 +19,7 @@ provider.start();
 provider.stop();
 ```
 
-#### Init process invokder
+#### Init RPC invokder
 ```ts
 import { Client } from 'mqk-pm-rpc';
 const client = new Client({
