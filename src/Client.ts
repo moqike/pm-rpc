@@ -9,6 +9,7 @@ import {
   C2PRpcData,
   RpcArgument,
   SerializedRpcArgument,
+  SerializedRpcArgumentElem,
   RPC_ARG_TYPE_KEY
 } from './types';
 
@@ -60,7 +61,7 @@ export class Client {
     options: RpcCallOptions = {
       timeout: 10000
     }) {
-    const serializedArguments = this._serializeArguments(args);
+    const serializedArguments = this._serializeArgument(args) as SerializedRpcArgumentElem[];
     const rpcUuid = uuidv1();
     const resultHanlder: ResultHandler = {};
     const result = new Promise((resolve, reject) => {
@@ -98,10 +99,41 @@ export class Client {
     }, timeout);
   }
 
-  private _serializeArguments (args: RpcArgument[]) {
-    return args.map((argument) => {
-      let result: SerializedRpcArgument = argument;
-      if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
+  // private _serializeArguments (args: RpcArgument[]) {
+  //   return args.map((argument) => {
+  //     let result: SerializedRpcArgument = argument;
+  //     if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
+  //       const type = argument[RPC_ARG_TYPE_KEY];
+  //       switch (type) {
+  //         case RPC_ARGUMENT_TYPE.CALLBACK:
+  //           const callbackArgument: CallbackFunction = argument as CallbackFunction;
+  //           this._callbackMap[callbackArgument.uuid] = callbackArgument._function;
+  //           result = {
+  //             [RPC_ARG_TYPE_KEY]: callbackArgument[RPC_ARG_TYPE_KEY],
+  //             uuid: callbackArgument.uuid
+  //           };
+  //           break;
+  //         case RPC_ARGUMENT_TYPE.RUNTIME:
+  //           const runtimeArgument: RuntimeFunction = argument as RuntimeFunction;
+  //           result = {
+  //             [RPC_ARG_TYPE_KEY]: runtimeArgument[RPC_ARG_TYPE_KEY],
+  //             functionString: runtimeArgument.functionString
+  //           };
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     }
+  //     return result;
+  //   });
+  // }
+
+  private _serializeArgument = (argument: RpcArgument): SerializedRpcArgument => {
+    let result: SerializedRpcArgument = argument;
+    if (Array.isArray(argument)) {
+      result = argument.map(this._serializeArgument);
+    } else if (argument && typeof argument === 'object') {
+      if (argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
         const type = argument[RPC_ARG_TYPE_KEY];
         switch (type) {
           case RPC_ARGUMENT_TYPE.CALLBACK:
@@ -122,9 +154,16 @@ export class Client {
           default:
             break;
         }
+      } else {
+        result = {};
+        // tslint:disable-next-line:forin
+        for (const key in argument) {
+          result[key] = this._serializeArgument(argument[key]);
+        }
       }
-      return result;
-    });
+    }
+
+    return result;
   }
 
   private _handleMessage = (event: MessageEvent) => {

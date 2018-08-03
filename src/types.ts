@@ -26,13 +26,17 @@ export interface RuntimeFunction extends SerializedRuntimeFunction {
   _function: any;
 }
 
-export type RpcArgument = null | undefined | boolean | string | number | object | CallbackFunction | RuntimeFunction;
+export type RpcArgumentElem = null | undefined | boolean | string | number | object | CallbackFunction | RuntimeFunction;
+
+export type RpcArgument = RpcArgumentElem | RpcArgumentElem[];
 
 // TODO: add support for promise response at the provider side
 export type RpcResult = null | undefined | boolean | string | number | object;
 
-export type SerializedRpcArgument = null | undefined | boolean | string | number | object
-  | SerializedCallbackFunction | SerializedRuntimeFunction;
+export type SerializedRpcArgumentElem = null | undefined | boolean | string | number | object
+| SerializedCallbackFunction | SerializedRuntimeFunction;
+
+export type SerializedRpcArgument = SerializedRpcArgumentElem | SerializedRpcArgumentElem[];
 
 /**
  * Provider to Client Message Data Types
@@ -53,7 +57,7 @@ export interface RpcRequest {
   uuid: string;
   provider: string;
   method: string;
-  arguments: SerializedRpcArgument[];
+  arguments: SerializedRpcArgumentElem[];
 }
 
 export type C2PRpcData = RpcRequest;

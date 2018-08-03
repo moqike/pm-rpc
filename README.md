@@ -49,8 +49,23 @@ result.then(function(rpcResult) {
 };
 
 ```
+More complicated case
+```ts
+import { Callback } from 'mqk-pm-rpc';
+const result = client.invoke('RPC', 'dialog.show', [{
+  title: 'title',
+  onClosed: Callback(function(){
+    console.log('dialog closed')
+  })
+}]);
+result.then(function(rpcResult) {
+  console.log(rpcResult);
+};
 
-TODO: Runtime function arguments
+```
+
+
+~~TODO: Runtime function arguments~~
 ```ts
 import { Runtime } from 'mqk-pm-rpc';
 client.invoke('dialog', 'show', ['title', Runtime(function(a, b){

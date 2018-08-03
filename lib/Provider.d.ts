@@ -14,7 +14,7 @@ export declare class Provider {
     stop(): void;
     private _handleMessage;
     private _invokeService;
-    private _deserializeArguments;
+    private _deserializeArgument;
     private _invokeCallback;
     private _sendResult;
 }

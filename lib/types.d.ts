@@ -20,9 +20,11 @@ export interface CallbackFunction extends SerializedCallbackFunction {
 export interface RuntimeFunction extends SerializedRuntimeFunction {
     _function: any;
 }
-export declare type RpcArgument = null | undefined | boolean | string | number | object | CallbackFunction | RuntimeFunction;
+export declare type RpcArgumentElem = null | undefined | boolean | string | number | object | CallbackFunction | RuntimeFunction;
+export declare type RpcArgument = RpcArgumentElem | RpcArgumentElem[];
 export declare type RpcResult = null | undefined | boolean | string | number | object;
-export declare type SerializedRpcArgument = null | undefined | boolean | string | number | object | SerializedCallbackFunction | SerializedRuntimeFunction;
+export declare type SerializedRpcArgumentElem = null | undefined | boolean | string | number | object | SerializedCallbackFunction | SerializedRuntimeFunction;
+export declare type SerializedRpcArgument = SerializedRpcArgumentElem | SerializedRpcArgumentElem[];
 /**
  * Provider to Client Message Data Types
  */
@@ -41,7 +43,7 @@ export interface RpcRequest {
     uuid: string;
     provider: string;
     method: string;
-    arguments: SerializedRpcArgument[];
+    arguments: SerializedRpcArgumentElem[];
 }
 export declare type C2PRpcData = RpcRequest;
 export interface RpcCallback {

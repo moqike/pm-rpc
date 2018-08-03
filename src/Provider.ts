@@ -9,6 +9,7 @@ import {
   RpcResult,
   C2PRpcData,
   CallbackFunction,
+  SerializedRpcArgument
 } from './types';
 
 export interface Providers {
@@ -56,7 +57,7 @@ export class Provider {
       methodPath.forEach((prop) => {
         context = context[prop];
       });
-      const deserializedArguments = this._deserializeArguments(rpcData.arguments);
+      const deserializedArguments = this._deserializeArgument(rpcData.arguments);
       const result = this._invokeService(context, method, deserializedArguments);
       this._sendResult(rpcData.uuid, result);
     }
@@ -72,14 +73,41 @@ export class Provider {
     return result;
   }
 
-  private _deserializeArguments (args: RpcArgument[]) {
-    const result = args.map((argument) => {
-      let mappedArgument = argument;
+  // private _deserializeArguments (args: RpcArgument[]) {
+  //   const result = args.map((argument) => {
+  //     let mappedArgument = argument;
+  //     if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
+  //       switch (argument[RPC_ARG_TYPE_KEY]) {
+  //         case RPC_ARGUMENT_TYPE.CALLBACK:
+  //           const self = this;
+  //           mappedArgument = function(){
+  //             // Trigger client callback
+  //             self._invokeCallback((argument as CallbackFunction).uuid, [...arguments]);
+  //           };
+  //           break;
+  //         case RPC_ARGUMENT_TYPE.RUNTIME:
+  //           // TODO: new function
+  //           // result = new Function()
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     }
+  //     return mappedArgument;
+  //   });
+  //   return result;
+  // }
+
+  private _deserializeArgument = (argument: SerializedRpcArgument) => {
+    const self = this;
+    let result = argument;
+    if (Array.isArray(argument)) {
+      result = argument.map(this._deserializeArgument);
+    } else if (argument && typeof argument === 'object') {
       if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
         switch (argument[RPC_ARG_TYPE_KEY]) {
           case RPC_ARGUMENT_TYPE.CALLBACK:
-            const self = this;
-            mappedArgument = function(){
+            result = function(){
               // Trigger client callback
               self._invokeCallback((argument as CallbackFunction).uuid, [...arguments]);
             };
@@ -91,9 +119,14 @@ export class Provider {
           default:
             break;
         }
+      } else {
+        result = {};
+        // tslint:disable-next-line:forin
+        for (const key in argument) {
+          result[key] = this._deserializeArgument(argument[key]);
+        }
       }
-      return mappedArgument;
-    });
+    }
     return result;
   }
 

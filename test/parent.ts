@@ -1,4 +1,4 @@
-import { Provider } from '../lib/index';
+import { Provider } from '../src/index';
 const ServiceProvider = {
   print: function(text: string){
     alert(text);
@@ -12,10 +12,12 @@ const ServiceProvider = {
     return 'ServiceProvider.delayCallback result';
   },
 
-  // TODO:
-  // printGeneratedString: function(generator: () => string){
-  //   alert(generator());
-  // }
+  openDialog: function(options: any) {
+    setTimeout(() => {
+      options.onClosed();
+    }, 1000);
+    return 'trigger option.onClosed after 1000ms';
+  }
 };
 const childiframe = document.getElementById('childframe');
 const provider = new Provider({

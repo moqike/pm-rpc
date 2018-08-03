@@ -16,7 +16,7 @@ export declare class Client {
     stop(): void;
     invoke(provider: string, method: string, args: RpcArgument[], options?: RpcCallOptions): Promise<{}>;
     private _initTimeout;
-    private _serializeArguments;
+    private _serializeArgument;
     private _handleMessage;
     private _handleCallbackMessage;
     private _handleResponseMessage;
