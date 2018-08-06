@@ -1,3 +1,5 @@
+<a href="http://travis-ci.com/moqike/pm-rpc"><img src="https://api.travis-ci.com/moqike/pm-rpc.svg?branch=master" alt="Build Status"></a>
+
 ## Install
 ```
 npm i --save mqk-pm-rpc
