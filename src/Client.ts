@@ -16,6 +16,7 @@ import {
 
 export interface ClientOptions {
   targetWindow: Window;
+  currentWindow?: Window;
 }
 
 export interface RpcCallOptions {
@@ -30,6 +31,7 @@ interface ResultHandler {
 export class Client {
   private _started = false;
   private _targetWindow: Window;
+  private _currentWindow: Window;
   private _resultHandlers: {
     [key: string]: ResultHandler
   } = {};
@@ -42,18 +44,19 @@ export class Client {
 
   constructor(options: ClientOptions) {
     this._targetWindow = options.targetWindow;
+    this._currentWindow = options.currentWindow || window;
   }
 
   start() {
     if (!this._started) {
       this._started = true;
-      window.addEventListener('message', this._handleMessage, false);
+      this._currentWindow.addEventListener('message', this._handleMessage, false);
     }
   }
 
   stop() {
     if (this._started) {
-      window.removeEventListener('message', this._handleMessage, false);
+      this._currentWindow.removeEventListener('message', this._handleMessage, false);
       this._started = false;
     }
   }

@@ -18,28 +18,31 @@ export interface Providers {
 export interface ProviderOptions {
   providers: Providers;
   targetWindow: Window;
+  currentWindow?: Window;
 }
 
 export class Provider {
   private _started = false;
   private _providers: Providers = {};
   private _targetWindow: Window;
+  private _currentWindow: Window;
 
   constructor(options: ProviderOptions) {
     this._providers = options.providers;
     this._targetWindow = options.targetWindow;
+    this._currentWindow = options.currentWindow || window;
   }
 
   start () {
     if (!this._started) {
       this._started = true;
-      window.addEventListener('message', this._handleMessage, false);
+      this._currentWindow.addEventListener('message', this._handleMessage, false);
     }
   }
 
   stop () {
     if (this._started) {
-      window.removeEventListener('message', this._handleMessage, false);
+      this._currentWindow.removeEventListener('message', this._handleMessage, false);
       this._started = false;
     }
   }

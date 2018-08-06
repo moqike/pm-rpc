@@ -5,8 +5,8 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   entry: {
-    child: './test/child.ts',
-    parent: './test/parent.ts'
+    child: './dev/child.ts',
+    parent: './dev/parent.ts'
   },
   module: {
     rules: [
@@ -23,12 +23,12 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'child.html',
-      template: './test/child.html',
+      template: './dev/child.html',
       chunks: ['child']
     }),
     new HtmlWebpackPlugin({
       filename: 'parent.html',
-      template: './test/parent.html',
+      template: './dev/parent.html',
       chunks: ['parent']
     })
   ]
