@@ -144,5 +144,19 @@ describe('common test', function() {
         done(e);
       }
     });
+
+    it('should call async RPC method with undefined callback', function(done) {
+      const result = client.invoke('ServiceProvider', 'delayCallback', [1000, Callback(undefined)]);
+      try {
+        result.then((returnedText) => {
+          assert.equal(returnedText, 'ServiceProvider.delayCallback result');
+          setTimeout(() => {
+            done();
+          }, 1500);
+        });
+      } catch (e) {
+        done(e);
+      }
+    });
   });
 });

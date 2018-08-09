@@ -113,7 +113,10 @@ export class Client {
         switch (type) {
           case RPC_ARGUMENT_TYPE.CALLBACK:
             const callbackArgument: CallbackFunction = argument as CallbackFunction;
-            this._callbackMap[callbackArgument.uuid] = callbackArgument._function;
+            const originCallback = callbackArgument._function;
+            if (typeof originCallback === 'function') {
+              this._callbackMap[callbackArgument.uuid] = callbackArgument._function;
+            }
             result = {
               [RPC_ARG_TYPE_KEY]: callbackArgument[RPC_ARG_TYPE_KEY],
               uuid: callbackArgument.uuid

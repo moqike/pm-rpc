@@ -93,7 +93,7 @@ export class Provider {
       if (argument && argument.hasOwnProperty(RPC_ARG_TYPE_KEY)) {
         switch (argument[RPC_ARG_TYPE_KEY]) {
           case RPC_ARGUMENT_TYPE.CALLBACK:
-            result = function(){
+            result = function() {
               // Trigger client callback
               self._invokeCallback((argument as CallbackFunction).uuid, [...arguments]);
             };

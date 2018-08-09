@@ -1,6 +1,6 @@
 {
   "name": "mqk-pm-rpc",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "post message rpc",
   "main": "lib/index.js",
   "scripts": {
