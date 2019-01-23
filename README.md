@@ -55,7 +55,7 @@ More complicated case
 ```ts
 import { Callback } from 'mqk-pm-rpc';
 const result = client.invoke('RPC', 'dialog.show', [{
-  title: 'title',
+  title: 'title',
   onClosed: Callback(function(){
     console.log('dialog closed')
   })
